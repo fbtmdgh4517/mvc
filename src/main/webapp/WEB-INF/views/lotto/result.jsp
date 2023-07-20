@@ -7,8 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-안녕하세요~<br>
-<a href="/calc">계산기</a>
-<a href="/lotto">로또</a>
+<h3>결과</h3>
+맞춘 개수는 <%=request.getAttribute("result") %>
+정답은 <%=request.getAttribute("lotto") %>
 </body>
 </html>
