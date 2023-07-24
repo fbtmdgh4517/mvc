@@ -9,10 +9,28 @@
 </head>
 <body>
 <h3>class info view</h3>
-<%
-	Map<String, String> classInfo = (Map<String, String>)request.getAttribute("classInfo");
-%>
+<form action="/class-info/delete" method="POST">
+<input type="hidden" name="ciNum" value="${classInfo.ciNum}">
 <table border="15" style="border-color: green; border-style: dashed;">
+	<tr>
+		<th>num</th>
+		<td>${classInfo.ciNum}</td>
+	</tr>
+	<tr>
+		<th>name</th>
+		<td>${classInfo.ciName}</td>
+	</tr>
+	<tr>
+		<th>desc</th>
+		<td>${classInfo.ciDesc}</td>
+	</tr>
+	<tr>
+		<th>
+			<button onclick="location.href='/class-info/update?ciNum=${classInfo.ciNum}'">수정</button>
+			<button>삭제</button>
+		</th>
+	</tr>
 </table>
+</form>
 </body>
 </html>

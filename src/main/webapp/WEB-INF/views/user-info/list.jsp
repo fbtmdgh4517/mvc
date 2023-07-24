@@ -21,11 +21,18 @@
 	<c:forEach items="${userInfoList}" var="userInfo">
 		<tr>
 			<td>${userInfo.uiNum}</td>
-			<td><a href="/user-info/view?uiNum=${userInfo.uiNum}">${userInfo.uiId}</a></td>
+			<td>
+				<a href="/user-info/view?uiNum=${userInfo.uiNum}">${userInfo.uiId}</a>
+			</td>
 			<td>${userInfo.uiPwd}</td>
 			<td>${userInfo.uiName}</td>
 		</tr>
 	</c:forEach>
+	<tr>
+		<td align="right" colspan="4">
+			<button onclick="location.href='/user-info/insert'">등록</button>
+		</td>
+	</tr>
 </table>
 </body>
 </html>

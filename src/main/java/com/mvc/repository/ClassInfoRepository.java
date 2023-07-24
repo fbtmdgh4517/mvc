@@ -10,24 +10,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mvc.common.DBCon;
+
 public class ClassInfoRepository {
 
 	public List<Map<String, String>> selectClassInfoList() {
-		String driverName = "org.mariadb.jdbc.Driver";
-		String url = "jdbc:mariadb://localhost:3306/kd";
-		String user = "root";
-		String pwd = "kd1824java";
-		
-		try {
-			Class.forName(driverName);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 		
 		List<Map<String, String>> classInfoList = new ArrayList<>();
 		
 		try {
-			Connection con = DriverManager.getConnection(url, user, pwd);
+			Connection con = DBCon.getCon();
 			String sql = "SELECT * FROM CLASS_INFO WHERE 1=1";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery();
@@ -46,19 +38,9 @@ public class ClassInfoRepository {
 	}
 	
 	public Map<String, String> selectClassInfo(String ciNum) {
-		String driver = "org.mariadb.jdbc.Driver";
-		String url = "jdbc:mariadb://localhost:3306/kd";
-		String user = "root";
-		String pwd = "kd1824java";
 		
 		try {
-			Class.forName(driver);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			Connection con = DriverManager.getConnection(url, user, pwd);
+			Connection con = DBCon.getCon();
 			String sql = "SELECT * FROM CLASS_INFO WHERE CI_NUM = ?";
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, ciNum);
@@ -74,6 +56,49 @@ public class ClassInfoRepository {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public int insertClassInfo(Map<String, String> classInfo) {
+		Connection con = DBCon.getCon();
+		String sql = "INSERT INTO CLASS_INFO(CI_NAME, CI_DESC) VALUES(?,?)";
+		try {
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, classInfo.get("ciName"));
+			pstmt.setString(2, classInfo.get("ciDesc"));
+			return pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int updateClassInfo(Map<String, String> classInfo) {
+		Connection con = DBCon.getCon();
+		String sql = "UPDATE CLASS_INFO SET CI_NAME=?, CI_DESC=? WHERE CI_NUM=?";
+		try {
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, classInfo.get("ciName"));
+			pstmt.setString(2, classInfo.get("ciDesc"));
+			pstmt.setString(3, classInfo.get("ciNum"));
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int deleteClassInfo(String ciNum) {
+		Connection con = DBCon.getCon();
+		String sql = "DELETE FROM CLASS_INFO WHERE CI_NUM = ?";
+		try {
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, ciNum);
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 	public static void main(String[] args) {
