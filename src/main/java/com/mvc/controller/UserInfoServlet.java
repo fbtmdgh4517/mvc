@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mvc.common.CommonView;
 import com.mvc.repository.UserInfoRepository;
 
 public class UserInfoServlet extends HttpServlet {
@@ -17,36 +18,23 @@ public class UserInfoServlet extends HttpServlet {
 	private UserInfoRepository uiRepo = new UserInfoRepository();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String uri = request.getRequestURI();
-		int idx = uri.lastIndexOf("/");
-		uri = uri.substring(idx + 1);
-		String path = "/WEB-INF/views/";
+		String uri = CommonView.getCmd(request);
 		if("list".equals(uri)) {
-			path += "user-info/list.jsp";
 			request.setAttribute("userInfoList", uiRepo.selectUserInfoList());
 		} else if("view".equals(uri)) {
-			path += "user-info/view.jsp";
 			request.setAttribute("userInfo", uiRepo.selectUserInfo(request.getParameter("uiNum")));
 		} else if("insert".equals(uri)) {
 //			insert가 doGet, doPost 둘다 있는 이유는 doGet에 있는거는 insert 페이지를 가려는거고 doPost에 있는거는 실제 데이터 삭제를 하려는거같음
-			path += "user-info/insert.jsp";
 		} else if("update".equals(uri)) {
-			path += "user-info/update.jsp";
 			request.setAttribute("userInfo", uiRepo.selectUserInfo(request.getParameter("uiNum")));
 		} else if("delete".equals(uri)) {
-			path += "user-info/delete.jsp";
 		}
-		
-		RequestDispatcher rd = request.getRequestDispatcher(path);
-		rd.forward(request, response);
+		CommonView.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8"); // 이거 하면 한글 안 깨짐, doGet은 안해도 안 깨짐
-		String uri = request.getRequestURI();
-		int idx = uri.lastIndexOf("/") + 1;
-		uri = uri.substring(idx);
-		String path = "/WEB-INF/views/common/msg.jsp";
+		String uri = CommonView.getCmd(request);
 		if("insert".equals(uri)) {
 			// 대입 할때만 쓸거면 변수를 새로 만들 필요 없고 직접 대입하는게 좋을 수도 있는데 무조건 그런건 아님
 //			String uiId = request.getParameter("uiId");
@@ -87,8 +75,7 @@ public class UserInfoServlet extends HttpServlet {
 				request.setAttribute("url", "/user-info/list");
 			}
 		}
-		RequestDispatcher rd = request.getRequestDispatcher(path);
-		rd.forward(request, response);
+		CommonView.goMassagePage(request, response);
 	}
 
 }
